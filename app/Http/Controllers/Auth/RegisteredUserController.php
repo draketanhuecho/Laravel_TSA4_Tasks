@@ -9,25 +9,18 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Str;
 use Illuminate\Validation\Rules;
-use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 class RegisteredUserController extends Controller
 {
-    /**
-     * Display the registration view.
-     */
     public function create(): View
     {
         return view('auth.register');
     }
 
-    /**
-     * Handle an incoming registration request.
-     *
-     * @throws ValidationException
-     */
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
@@ -36,12 +29,30 @@ class RegisteredUserController extends Controller
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        $user = User::create([
-            'username'  => explode('@', $request->email)[0] . rand(10, 99),
-            'full_name' => $request->name,
-            'email'     => $request->email,
-            'password'  => Hash::make($request->password),
-        ]);
+        $data = [
+            'email' => $request->email,
+            'password' => Hash::make($request->password),
+        ];
+
+        if (Schema::hasColumn('users', 'name')) {
+            $data['name'] = $request->name;
+        }
+
+        if (Schema::hasColumn('users', 'full_name')) {
+            $data['full_name'] = $request->name;
+        }
+
+        if (Schema::hasColumn('users', 'username')) {
+            $baseUsername = Str::before($request->email, '@');
+            $username = $baseUsername;
+            $counter = 1;
+            while (User::where('username', $username)->exists()) {
+                $username = $baseUsername . $counter++;
+            }
+            $data['username'] = $username;
+        }
+
+        $user = User::create($data);
 
         event(new Registered($user));
 
