@@ -33,6 +33,11 @@ class CustomerController extends Controller
             ->with('success', 'Customer created successfully.');
     }
 
+    public function show(Customer $customer)
+    {
+        return redirect()->route('customers.edit', $customer);
+    }
+
     public function edit(Customer $customer)
     {
         return view('customers.edit', compact('customer'));
@@ -50,5 +55,13 @@ class CustomerController extends Controller
 
         return redirect()->route('customers.index')
             ->with('success', 'Customer updated successfully.');
+    }
+
+    public function destroy(Customer $customer)
+    {
+        $customer->delete();
+
+        return redirect()->route('customers.index')
+            ->with('success', 'Customer deleted successfully.');
     }
 }

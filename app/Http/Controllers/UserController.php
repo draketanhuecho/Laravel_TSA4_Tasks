@@ -34,6 +34,11 @@ class UserController extends Controller
             ->with('success', 'User created successfully.');
     }
 
+    public function show(User $user)
+    {
+        return redirect()->route('users.edit', $user);
+    }
+
     public function edit(User $user)
     {
         return view('users.edit', compact('user'));
@@ -65,5 +70,17 @@ class UserController extends Controller
 
         return redirect()->route('users.index')
             ->with('success', 'User updated successfully.');
+    }
+
+    public function destroy(User $user)
+    {
+        if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
+            Storage::disk('public')->delete($user->avatar);
+        }
+
+        $user->delete();
+
+        return redirect()->route('users.index')
+            ->with('success', 'User deleted successfully.');
     }
 }
