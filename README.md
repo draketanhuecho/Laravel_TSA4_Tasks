@@ -1,16 +1,16 @@
-# POS System Application (Laravel - TFA5)
+# Laravel POS System (IT0049 - TFA7)
 
-This repository contains the Laravel implementation of Technical Formative Assessment 5 for IT0049 (Web System Technologies).
-
-## Pages Included
-- **Home (`/`)**: Landing page of the POS Application.
-- **About (`/about`)**: Background information about the system.
-- **Customer Accounts (`/customers`)**: Displays customer records from a static array.
-- **User Accounts (`/users`)**: Displays user accounts and roles from a static array.
-
-## How to Setup and Run Locally
-
-1. Clone this repository:
-   ```bash
-   git clone <YOUR_GITHUB_REPOSITORY_URL>
-   cd pos-laravel
+## Setup & Installation Instructions
+1. Clone the repository:
+   `git clone https://github.com/draketanhuecho/Laravel_TFA5.git`
+2. Install PHP dependencies:
+   `composer install`
+3. Copy environment configuration and generate app key:
+   `cp .env.example .env`
+   `php artisan key:generate`
+4. Configure database credentials in `.env` (`DB_DATABASE`, `DB_USERNAME`, `DB_PASSWORD`) and run migrations with seeders:
+   `php artisan migrate --seed`
+5. Create the public storage symbolic link for user avatars:
+   `php artisan storage:link`
+6. Run the local development server:
+   `php artisan serve`

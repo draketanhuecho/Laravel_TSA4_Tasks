@@ -14,10 +14,8 @@
 </head>
 <body>
     <nav>
-        <a href="{{ route('welcome') }}">Home (Today)</a>
-        <a href="{{ route('tasks.index') }}">All Tasks</a>
-        <a href="{{ route('profile') }}">Profile</a>
-        <a href="{{ route('about') }}">About</a>
+        <a href="{{ route('customers.index') }}">Customers</a> |
+        <a href="{{ route('users.index') }}">User Accounts</a>
     </nav>
     <hr>
     <main>
